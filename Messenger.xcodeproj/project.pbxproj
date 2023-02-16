@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB650A57299DDC3A00A00DFC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB650A56299DDC3A00A00DFC /* Extensions.swift */; };
 		BBBE4541290D756500E2694A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBE4540290D756500E2694A /* AppDelegate.swift */; };
 		BBBE4543290D756500E2694A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBE4542290D756500E2694A /* SceneDelegate.swift */; };
 		BBBE4545290D756500E2694A /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBE4544290D756500E2694A /* ConversationsViewController.swift */; };
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		1FAF2AE6BF4279F54007C260 /* Pods-Messenger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger.release.xcconfig"; path = "Target Support Files/Pods-Messenger/Pods-Messenger.release.xcconfig"; sourceTree = "<group>"; };
 		B45A0CEE7535CB87F3063B68 /* Pods-Messenger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger.debug.xcconfig"; path = "Target Support Files/Pods-Messenger/Pods-Messenger.debug.xcconfig"; sourceTree = "<group>"; };
+		BB650A56299DDC3A00A00DFC /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BBBE453D290D756500E2694A /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBBE4540290D756500E2694A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBBE4542290D756500E2694A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -68,8 +70,16 @@
 				B45A0CEE7535CB87F3063B68 /* Pods-Messenger.debug.xcconfig */,
 				1FAF2AE6BF4279F54007C260 /* Pods-Messenger.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		BB650A55299DD79300A00DFC /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				BBBE455C290D7A7F00E2694A /* LoginViewController.swift */,
+				BBBE455E290D7A8F00E2694A /* RegisterViewController.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 		BBBE4534290D756500E2694A = {
@@ -107,8 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				BBBE4544290D756500E2694A /* ConversationsViewController.swift */,
-				BBBE455C290D7A7F00E2694A /* LoginViewController.swift */,
-				BBBE455E290D7A8F00E2694A /* RegisterViewController.swift */,
+				BB650A55299DD79300A00DFC /* Authentication */,
 				BBBE4560290D7AAA00E2694A /* PhotoViewerViewController.swift */,
 				BBBE4562290D7AB600E2694A /* VideoPlayerViewController.swift */,
 				BBBE4564290D7AD500E2694A /* NewConversationViewController.swift */,
@@ -145,6 +154,7 @@
 			children = (
 				BBBE4540290D756500E2694A /* AppDelegate.swift */,
 				BBBE4542290D756500E2694A /* SceneDelegate.swift */,
+				BB650A56299DDC3A00A00DFC /* Extensions.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -260,6 +270,7 @@
 				BBBE4565290D7AD500E2694A /* NewConversationViewController.swift in Sources */,
 				BBBE4545290D756500E2694A /* ConversationsViewController.swift in Sources */,
 				BBBE4563290D7AB600E2694A /* VideoPlayerViewController.swift in Sources */,
+				BB650A57299DDC3A00A00DFC /* Extensions.swift in Sources */,
 				BBBE4541290D756500E2694A /* AppDelegate.swift in Sources */,
 				BBBE4567290D7AE800E2694A /* ProfileViewController.swift in Sources */,
 				BBBE4543290D756500E2694A /* SceneDelegate.swift in Sources */,
@@ -417,7 +428,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -450,7 +461,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
