@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class RegisterViewController: UIViewController {
     
@@ -25,6 +26,15 @@ class RegisterViewController: UIViewController {
         imageView.layer.borderColor = UIColor.lightGray.cgColor
         
         return imageView
+    }()
+    
+    private let chooseImageTextView: UITextView = {
+        let textView = UITextView()
+        textView.text = "Choose image for photo profile"
+        textView.textColor = UIColor.lightGray
+        textView.textAlignment = .center
+        
+        return textView
     }()
     
     private let firstNameField: UITextField = {
@@ -122,6 +132,7 @@ class RegisterViewController: UIViewController {
         // Add Subviews
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
+        scrollView.addSubview(chooseImageTextView)
         scrollView.addSubview(firstNameField)
         scrollView.addSubview(lastNameField)
         scrollView.addSubview(emailField)
@@ -145,14 +156,19 @@ class RegisterViewController: UIViewController {
         
         imageView.layer.cornerRadius = imageView.width/2.0
         
+        chooseImageTextView.frame = CGRect(x: 0,
+                                           y: imageView.bottom + 10,
+                                           width: scrollView.width,
+                                           height: 52)
+        
         firstNameField.frame = CGRect(x: 30,
-                                  y: imageView.bottom + 10,
-                                  width: scrollView.width - 60,
-                                  height: 52)
+                                      y: chooseImageTextView.bottom + 20,
+                                      width: scrollView.width - 60,
+                                      height: 52)
         lastNameField.frame = CGRect(x: 30,
-                                  y: firstNameField.bottom + 10,
-                                  width: scrollView.width - 60,
-                                  height: 52)
+                                     y: firstNameField.bottom + 10,
+                                     width: scrollView.width - 60,
+                                     height: 52)
         emailField.frame = CGRect(x: 30,
                                   y: lastNameField.bottom + 10,
                                   width: scrollView.width - 60,
@@ -192,6 +208,16 @@ class RegisterViewController: UIViewController {
         }
         
         // Firebase Register
+        
+        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            guard let result = authResult, error == nil else {
+                print("Error creating user")
+                return
+            }
+            
+            let user = result.user
+            print("Create user: \(user.email ?? "")")
+        }
     }
     
     func alertUserRegisterError() {
