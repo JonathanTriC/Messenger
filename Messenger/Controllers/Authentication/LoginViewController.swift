@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FBSDKLoginKit
 
 class LoginViewController: UIViewController {
     
@@ -67,6 +68,40 @@ class LoginViewController: UIViewController {
         
         return button
     }()
+    
+    private let sosmedLoginTextView: UITextView = {
+        let textView = UITextView()
+        textView.text = "--- Or continue with ---"
+        textView.textColor = UIColor.lightGray
+        textView.textAlignment = .center
+        
+        return textView
+    }()
+    
+    private let facebookLoginButton: FBLoginButton = {
+        let button = FBLoginButton()
+        button.layer.cornerRadius = 26
+        button.layer.masksToBounds = true
+        button.permissions = ["public_profile", "email"]
+        return button
+    }()
+    
+    private let blankView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(named: "fbBlue")
+        view.layer.cornerRadius = 26
+        view.layer.masksToBounds = true
+        
+        return view
+    }()
+    
+    private let fbIconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "fbIcon")
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,13 +119,18 @@ class LoginViewController: UIViewController {
         
         emailField.delegate = self
         passwordField.delegate = self
-        
+        facebookLoginButton.delegate = self
+                
         // Add Subviews
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         scrollView.addSubview(emailField)
         scrollView.addSubview(passwordField)
-        scrollView.addSubview(loginButton)        
+        scrollView.addSubview(loginButton)
+        scrollView.addSubview(sosmedLoginTextView)
+        scrollView.addSubview(facebookLoginButton)
+        scrollView.addSubview(blankView)
+        scrollView.addSubview(fbIconImageView)
     }
     
     override func viewDidLayoutSubviews() {
@@ -114,6 +154,22 @@ class LoginViewController: UIViewController {
                                    y: passwordField.bottom + 50,
                                    width: scrollView.width - 60,
                                    height: 52)
+        sosmedLoginTextView.frame = CGRect(x: 0,
+                                           y: loginButton.bottom + 10,
+                                           width: scrollView.width,
+                                           height: 30)
+        facebookLoginButton.frame = CGRect(x: 30,
+                                           y: sosmedLoginTextView.bottom + 10,
+                                           width: scrollView.width - 60,
+                                           height: 52)
+        blankView.frame = CGRect(x: 30,
+                                 y: sosmedLoginTextView.bottom + 10,
+                                 width: 30,
+                                 height: 52)
+        fbIconImageView.frame = CGRect(x: 90,
+                                       y: sosmedLoginTextView.bottom + 26,
+                                       width: 20,
+                                       height: 20)
     }
     
     @objc private func loginButtonTapped() {
@@ -167,5 +223,75 @@ extension LoginViewController: UITextFieldDelegate {
         }
         
         return true
+    }
+}
+
+extension LoginViewController: LoginButtonDelegate {
+    func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
+        // no operation
+    }
+    
+    func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
+        guard let token = result?.token?.tokenString else {
+            print("User failed to log in with facebook")
+            return
+        }
+        print("Facebook token: \(token)")
+        
+        let facebookRequest = FBSDKLoginKit.GraphRequest(
+            graphPath: "me",
+            parameters: ["fields": "email, name"],
+            tokenString: token,
+            version: nil,
+            httpMethod: .get
+        )
+        
+        facebookRequest.start { _, result, error in
+            guard let result = result as? [String: Any], error == nil else {
+                print("Failed to make facebook graph request")
+                return
+            }
+            
+            print("result: \(result)")
+            guard let userName = result["name"] as? String, let email = result["email"] as? String else {
+                print("Failed to get email and name from fb result")
+                return
+            }
+            
+            let nameComponents = userName.components(separatedBy: " ")
+            guard nameComponents.count == 2 else {
+                return
+            }
+            
+            let firstName = nameComponents[0]
+            let lastName = nameComponents[1]
+            
+            DatabaseManager.shared.userExists(with: email) { exists in
+                if !exists {
+                    DatabaseManager.shared.insertUser(with: BincangAppUser(
+                        firstName: firstName,
+                        lastName: lastName,
+                        emailAddress: email
+                    ))
+                }
+            }
+            
+            let credential = FacebookAuthProvider.credential(withAccessToken: token)
+            print("Facebook credential: \(credential)")
+            FirebaseAuth.Auth.auth().signIn(with: credential) { [weak self] authResult, error in
+                guard let strongSelf = self else {
+                    return
+                }
+                guard authResult != nil, error == nil else {
+                    if let error = error {
+                        print("Facebook credential login failed, MFA may be needed - \(error)")
+                    }
+                    return
+                }
+                
+                print("Succesfully logged user in")
+                strongSelf.navigationController?.dismiss(animated: true)
+            }
+        }
     }
 }

@@ -9,15 +9,16 @@ import UIKit
 import FirebaseAuth
 
 class ConversationsViewController: UIViewController {
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        validateAuth()
+    }
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        validateAuth()
     }
     
     private func validateAuth() {
