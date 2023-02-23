@@ -17,4 +17,8 @@ pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
 pod 'FBSDKShareKit'
 
+pod 'MessageKit'
+pod 'JGProgressHUD'
+pod 'SDWebImage'
+
 end
