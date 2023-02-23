@@ -7,8 +7,10 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 class RegisterViewController: UIViewController {
+    private let spinner = JGProgressHUD(style: .dark)
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -28,15 +30,15 @@ class RegisterViewController: UIViewController {
         return imageView
     }()
     
-    private let chooseImageTextView: UITextView = {
-        let textView = UITextView()
-        textView.text = "Choose image for photo profile"
-        textView.textColor = UIColor.lightGray
-        textView.textAlignment = .center
+    private let chooseImageLabelView: UILabel = {
+        let labelView = UILabel()
+        labelView.text = "Choose image for photo profile"
+        labelView.textColor = UIColor.lightGray
+        labelView.textAlignment = .center
         
-        return textView
+        return labelView
     }()
-    
+
     private let firstNameField: UITextField = {
         let field = UITextField()
         field.autocapitalizationType = .none
@@ -132,7 +134,7 @@ class RegisterViewController: UIViewController {
         // Add Subviews
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
-        scrollView.addSubview(chooseImageTextView)
+        scrollView.addSubview(chooseImageLabelView)
         scrollView.addSubview(firstNameField)
         scrollView.addSubview(lastNameField)
         scrollView.addSubview(emailField)
@@ -156,13 +158,13 @@ class RegisterViewController: UIViewController {
         
         imageView.layer.cornerRadius = imageView.width/2.0
         
-        chooseImageTextView.frame = CGRect(x: 0,
+        chooseImageLabelView.frame = CGRect(x: 0,
                                            y: imageView.bottom + 10,
                                            width: scrollView.width,
                                            height: 52)
         
         firstNameField.frame = CGRect(x: 30,
-                                      y: chooseImageTextView.bottom + 20,
+                                      y: chooseImageLabelView.bottom + 20,
                                       width: scrollView.width - 60,
                                       height: 52)
         lastNameField.frame = CGRect(x: 30,
@@ -207,6 +209,8 @@ class RegisterViewController: UIViewController {
             return
         }
         
+        spinner.show(in: view)
+        
         // Firebase Register
         
         DatabaseManager.shared.userExists(with: email) { [weak self] exists in
@@ -214,6 +218,10 @@ class RegisterViewController: UIViewController {
                 return
             }
             
+            DispatchQueue.main.async {
+                strongSelf.spinner.dismiss()
+            }
+
             guard !exists else {
                 // user already exist
                 strongSelf.alertUserRegisterError(message: "Email is already exits..")

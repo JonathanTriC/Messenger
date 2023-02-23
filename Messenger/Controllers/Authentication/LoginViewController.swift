@@ -8,8 +8,10 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import JGProgressHUD
 
 class LoginViewController: UIViewController {
+    private let spinner = JGProgressHUD(style: .dark)
     
     private let scrollView: UIScrollView = {
        let scrollView = UIScrollView()
@@ -69,15 +71,15 @@ class LoginViewController: UIViewController {
         return button
     }()
     
-    private let sosmedLoginTextView: UITextView = {
-        let textView = UITextView()
-        textView.text = "--- Or continue with ---"
-        textView.textColor = UIColor.lightGray
-        textView.textAlignment = .center
+    private let sosmedLoginLabelView: UILabel = {
+        let labelView = UILabel()
+        labelView.text = "--- Or continue with ---"
+        labelView.textColor = UIColor.lightGray
+        labelView.textAlignment = .center
         
-        return textView
+        return labelView
     }()
-    
+
     private let facebookLoginButton: FBLoginButton = {
         let button = FBLoginButton()
         button.layer.cornerRadius = 26
@@ -127,7 +129,7 @@ class LoginViewController: UIViewController {
         scrollView.addSubview(emailField)
         scrollView.addSubview(passwordField)
         scrollView.addSubview(loginButton)
-        scrollView.addSubview(sosmedLoginTextView)
+        scrollView.addSubview(sosmedLoginLabelView)
         scrollView.addSubview(facebookLoginButton)
         scrollView.addSubview(blankView)
         scrollView.addSubview(fbIconImageView)
@@ -154,20 +156,20 @@ class LoginViewController: UIViewController {
                                    y: passwordField.bottom + 50,
                                    width: scrollView.width - 60,
                                    height: 52)
-        sosmedLoginTextView.frame = CGRect(x: 0,
+        sosmedLoginLabelView.frame = CGRect(x: 0,
                                            y: loginButton.bottom + 10,
                                            width: scrollView.width,
                                            height: 30)
         facebookLoginButton.frame = CGRect(x: 30,
-                                           y: sosmedLoginTextView.bottom + 10,
+                                           y: sosmedLoginLabelView.bottom + 10,
                                            width: scrollView.width - 60,
                                            height: 52)
         blankView.frame = CGRect(x: 30,
-                                 y: sosmedLoginTextView.bottom + 10,
+                                 y: sosmedLoginLabelView.bottom + 10,
                                  width: 30,
                                  height: 52)
         fbIconImageView.frame = CGRect(x: 90,
-                                       y: sosmedLoginTextView.bottom + 26,
+                                       y: sosmedLoginLabelView.bottom + 26,
                                        width: 20,
                                        height: 20)
     }
@@ -181,13 +183,21 @@ class LoginViewController: UIViewController {
             return
         }
         
+        spinner.show(in: view)
+        
         // Firebase Login
         FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             guard let strongSelf = self else {
                 return
             }
+            
+            DispatchQueue.main.async {
+                strongSelf.spinner.dismiss()
+            }
+
             guard let result = authResult, error == nil else {
                 print("Failed to log in user with email: \(email)")
+                strongSelf.alertUserLoginError(message: "Wrong email or password! Please try again with the correct credential.")
                 return
             }
             
@@ -197,9 +207,9 @@ class LoginViewController: UIViewController {
         }
     }
     
-    func alertUserLoginError() {
+    func alertUserLoginError(message: String = "Please enter all information to log in") {
        let alert = UIAlertController(title: "Whoops",
-                                     message: "Please enter all information to log in",
+                                     message: message,
                                      preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         
@@ -236,7 +246,6 @@ extension LoginViewController: LoginButtonDelegate {
             print("User failed to log in with facebook")
             return
         }
-        print("Facebook token: \(token)")
         
         let facebookRequest = FBSDKLoginKit.GraphRequest(
             graphPath: "me",
@@ -252,7 +261,6 @@ extension LoginViewController: LoginButtonDelegate {
                 return
             }
             
-            print("result: \(result)")
             guard let userName = result["name"] as? String, let email = result["email"] as? String else {
                 print("Failed to get email and name from fb result")
                 return
@@ -277,14 +285,14 @@ extension LoginViewController: LoginButtonDelegate {
             }
             
             let credential = FacebookAuthProvider.credential(withAccessToken: token)
-            print("Facebook credential: \(credential)")
+
             FirebaseAuth.Auth.auth().signIn(with: credential) { [weak self] authResult, error in
                 guard let strongSelf = self else {
                     return
                 }
                 guard authResult != nil, error == nil else {
                     if let error = error {
-                        print("Facebook credential login failed, MFA may be needed - \(error)")
+                        print("Facebook credential login failed: \(error)")
                     }
                     return
                 }
