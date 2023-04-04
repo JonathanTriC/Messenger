@@ -9,6 +9,8 @@ import UIKit
 import JGProgressHUD
 
 class NewConversationViewController: UIViewController {
+    public var completion: (([String: String]) -> (Void))?
+    
     private let spinner = JGProgressHUD(style: .dark)
     
     private var users = [[String: String]]()
@@ -143,12 +145,19 @@ extension NewConversationViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = results[indexPath.row]["name"]
+        cell.textLabel?.text = results[indexPath.row]["name"]?.capitalized
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let targetUserData = results[indexPath.row]
+        
+        dismiss(animated: true) { [weak self] in
+            self?.completion?(targetUserData)
+        }
+        
     }
 }
