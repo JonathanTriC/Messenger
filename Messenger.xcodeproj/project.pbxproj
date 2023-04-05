@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB63EBA229DD117600F6272F /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB63EBA129DD117600F6272F /* ConversationTableViewCell.swift */; };
 		BB650A57299DDC3A00A00DFC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB650A56299DDC3A00A00DFC /* Extensions.swift */; };
 		BB650A59299E08E300A00DFC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB650A58299E08E300A00DFC /* GoogleService-Info.plist */; };
 		BB9B4A0E29A7400D000E6D51 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = BB9B4A0D29A7400D000E6D51 /* Realm */; };
@@ -32,6 +33,7 @@
 /* Begin PBXFileReference section */
 		1FAF2AE6BF4279F54007C260 /* Pods-Messenger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger.release.xcconfig"; path = "Target Support Files/Pods-Messenger/Pods-Messenger.release.xcconfig"; sourceTree = "<group>"; };
 		B45A0CEE7535CB87F3063B68 /* Pods-Messenger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger.debug.xcconfig"; path = "Target Support Files/Pods-Messenger/Pods-Messenger.debug.xcconfig"; sourceTree = "<group>"; };
+		BB63EBA129DD117600F6272F /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		BB650A56299DDC3A00A00DFC /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BB650A58299E08E300A00DFC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BB9B4A1129A74248000E6D51 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			children = (
 				BBBE4559290D795D00E2694A /* Storyboards */,
 				BBBE4549290D756700E2694A /* Assets.xcassets */,
+				BB63EBA129DD117600F6272F /* ConversationTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				BBBE4541290D756500E2694A /* AppDelegate.swift in Sources */,
 				BBBE4567290D7AE800E2694A /* ProfileViewController.swift in Sources */,
 				BBBE4543290D756500E2694A /* SceneDelegate.swift in Sources */,
+				BB63EBA229DD117600F6272F /* ConversationTableViewCell.swift in Sources */,
 				BB9B4A1229A74249000E6D51 /* ChatViewController.swift in Sources */,
 				BBBE4561290D7AAA00E2694A /* PhotoViewerViewController.swift in Sources */,
 				BB9B4A1429A74A34000E6D51 /* StorageManager.swift in Sources */,
