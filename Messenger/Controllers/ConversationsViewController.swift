@@ -150,7 +150,7 @@ extension ConversationsViewController: UITableViewDelegate, UITableViewDataSourc
         let model = conversations[indexPath.row]
         
         let vc = ChatViewController(with: model.otherUserEmail, id: model.id)
-        vc.title = model.name
+        vc.title = model.name.capitalized
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }
